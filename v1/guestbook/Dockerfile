@@ -1,16 +1,3 @@
-# Please choose from the below set of Docker commands to complete your Dockerfile:
-
-# COPY
-# RUN
-# ADD
-# EXPOSE
-# FROM
-# CMD
-# PUSH
-# PULL
-# WORKDIR
-
-
 FROM golang:1.18 AS builder
 
 WORKDIR /app
@@ -24,14 +11,19 @@ RUN go build -o main main.go
 
 FROM ubuntu:18.04
 
-<Please fill in the required Docker command> --from=builder /app/main /app/guestbook
+# Copiamos el binario compilado desde la etapa de build
+COPY --from=builder /app/main /app/guestbook
 
-<Please fill in the required Docker command> public/index.html /app/public/index.html
-<Please fill in the required Docker command> public/script.js /app/public/script.js
-<Please fill in the required Docker command> public/style.css /app/public/style.css
-<Please fill in the required Docker command> public/jquery.min.js /app/public/jquery.min.js
+# Copiamos los archivos estáticos
+COPY public/index.html /app/public/index.html
+COPY public/script.js /app/public/script.js
+COPY public/style.css /app/public/style.css
+COPY public/jquery.min.js /app/public/jquery.min.js
 
 WORKDIR /app
 
+# Exponemos el puerto que usa la aplicación
+EXPOSE 3000
+
+# Comando por defecto al iniciar el contenedor
 CMD ["./guestbook"]
-<Please fill in the required Docker command> 3000
